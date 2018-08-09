@@ -18,10 +18,8 @@ int Image_Stat(Mat img)
     width = img.cols;
     height = img.rows;
  
-    //存入矩阵数据
     dataX = (unsigned char *)img.data;
  
-    //计算步长
     step = img.step/sizeof(char);
     chanel = img.channels();
  
@@ -40,14 +38,6 @@ int Image_Stat(Mat img)
                 count++;
         }
 
-    //Mat_<Vec3f>::const_iterator rit=img.begin<Vec3f>();
-    //Mat_<Vec3f>::const_iterator ritend=img.end<Vec3f>();
-    //for(;rit!=ritend;++rit)
-    //{
-    //    if((*rit)[0] >= 200)
-    //        count++;
-    //}
- 
     int area=width*height;
     cout<<"step, chanel:"<<step<<" "<<chanel<<endl;
     cout<<"width == "<<width<<" height == "<<height<<endl;
@@ -78,13 +68,7 @@ int main(int argc, char** argv)
         Mat dstImg;
         Mat element = getStructuringElement(MORPH_RECT, Size(SIZE, SIZE));
 
-        morphologyEx(srcImg, dstImg, MORPH_OPEN, element);  //开运算
-        //morphologyEx(dstImg, dstImg, MORPH_OPEN, element);  //开运算
-        //morphologyEx(srcImg, dstImg, MORPH_CLOSE, element);  //闭运算
-        //morphologyEx(srcImg, dstImg, MORPH_GRADIENT, element);  //形态学梯度运算
-        //morphologyEx(srcImg, dstImg, MORPH_TOPHAT, element);  //顶帽运算
-        //morphologyEx(srcImg, dstImg, MORPH_BLACKHAT, element);  //??????运算
-        //morphologyEx(srcImg, dstImg, MORPH_ERODE, element);  //形态学EROAD
+        morphologyEx(srcImg, dstImg, MORPH_OPEN, element);  
 
         int srcCount = Image_Stat(srcImg);
         int dstCount = Image_Stat(dstImg);
@@ -92,21 +76,13 @@ int main(int argc, char** argv)
         
         dArrData[i] = srcCount - dstCount; 
         cout << "diffCount:" << srcCount - dstCount << endl;
-
-        cvNamedWindow("src", CV_WINDOW_NORMAL| CV_WINDOW_KEEPRATIO| CV_GUI_EXPANDED);
-        cvNamedWindow(fileFullName.c_str(), CV_WINDOW_NORMAL| CV_WINDOW_KEEPRATIO| CV_GUI_EXPANDED);
-        imshow("src", srcImg);
-        imshow(fileFullName.c_str(), dstImg);
-        //waitKey(0);
     }
 
     int DATA_CNT = i;
     double dSum = diffCount;
 
-    // 求平均数 
     double dAverageData = dSum / DATA_CNT; 
  
-    // 计算所有的数的方差(各个数据分别与其和的平均数之差的平方的和的平均数) 
     double dVariance = 0.0; 
     for (int nIdx = 0; nIdx < DATA_CNT; nIdx++) 
     { 
@@ -116,7 +92,6 @@ int main(int argc, char** argv)
     } 
     dVariance /= DATA_CNT; 
  
-    // 计算标准差(方差的算术平方根,反映一组数据的离散程序) 
     double dStandardDeviation = sqrt(dVariance);
 
     cout << "avg diffCount:" << dAverageData << endl;
@@ -141,6 +116,5 @@ int main(int argc, char** argv)
     double finalAvg = rstSum/index;
     cout << "finalAvg:" << finalAvg << endl;
         
-
     return 0;
 }
