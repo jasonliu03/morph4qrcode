@@ -6,6 +6,9 @@ using namespace std;
 const int SIZE = 3;
 const int THRESHOLD = 200;
 
+int POS_THRESHOLD = 696;
+int NEG_THRESHOLD = 308;
+
 
 int Image_Stat(Mat img)
 {
@@ -59,9 +62,16 @@ int Image_Stat(Mat img)
 int main(int argc, char** argv)
 {
     char * filename = "pos1.jpg";
-    if(argc > 1)
+    if(argc == 2)
     {
         filename = argv[1];
+    }
+
+    if(argc == 4)
+    {
+        filename = argv[1];
+        POS_THRESHOLD = atoi(argv[2]);
+        NEG_THRESHOLD = atoi(argv[3]);
     }
 
     Mat srcImg = imread(filename);
@@ -80,6 +90,11 @@ int main(int argc, char** argv)
     int dstCount = Image_Stat(dstImg);
     
     cout << "src - dst count:" << srcCount - dstCount << endl;
+    
+    if ((srcCount-dstCount) > ((POS_THRESHOLD+NEG_THRESHOLD)/2))
+        cout << "result:" << "True" << endl;
+    else
+        cout << "result:" << "False" << endl;
 
     cvNamedWindow("src", CV_WINDOW_NORMAL| CV_WINDOW_KEEPRATIO| CV_GUI_EXPANDED);
     cvNamedWindow(filename, CV_WINDOW_NORMAL| CV_WINDOW_KEEPRATIO| CV_GUI_EXPANDED);
